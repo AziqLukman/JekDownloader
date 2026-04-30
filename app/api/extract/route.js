@@ -2,8 +2,10 @@ import { NextResponse } from "next/server";
 import { execFile } from "child_process";
 import path from "path";
 import util from "util";
+import fs from "fs";
 
 const execFileAsync = util.promisify(execFile);
+
 
 const getBinPath = () => path.join(process.cwd(), 'node_modules', 'youtube-dl-exec', 'bin', 'yt-dlp.exe');
 
@@ -89,13 +91,13 @@ async function internalTikTokScraper(url) {
       signal: AbortSignal.timeout(10000)
     });
     const html = await res.text();
-    
+
     // Cari __UNIVERSAL_DATA_FOR_REA_T7_CLIENT__ (data JSON TikTok modern)
     const jsonMatch = html.match(/<script id="__UNIVERSAL_DATA_FOR_REA_T7_CLIENT__" type="application\/json">([\s\S]*?)<\/script>/);
     if (jsonMatch) {
       const allData = JSON.parse(jsonMatch[1]);
       const videoData = allData?.["webapp.video-detail"]?.itemInfo?.itemStruct || allData?.default?.["webapp.video-detail"]?.itemInfo?.itemStruct;
-      
+
       if (videoData) {
         return {
           title: videoData.desc || "TikTok Video",
@@ -113,26 +115,38 @@ async function internalTikTokScraper(url) {
 // === JekEngine Internal Scraper: Instagram ===
 async function internalInstagramScraper(url) {
   try {
+    const headers = {
+      'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+    };
+
+    // Gunakan Cookie manual jika ada untuk bypass login wall IG
+    const cookieStringPath = path.join(process.cwd(), 'cookie_string.txt');
+    if (fs.existsSync(cookieStringPath)) {
+      const rawCookie = fs.readFileSync(cookieStringPath, 'utf8').trim();
+      if (rawCookie) headers['Cookie'] = rawCookie;
+    }
+
     const res = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-      },
+      headers,
       signal: AbortSignal.timeout(10000)
     });
     const html = await res.text();
-    
+
     // Ambil dari Meta Tags (OpenGraph) - Cara paling "Internal" & Cepet
     const videoMatch = html.match(/<meta property="og:video" content="(.*?)"/);
     const imageMatch = html.match(/<meta property="og:image" content="(.*?)"/);
     const titleMatch = html.match(/<meta property="og:title" content="(.*?)"/);
-    
+
     if (videoMatch || imageMatch) {
+      const cleanUrl = (str) => str ? str.replace(/&amp;/g, '&') : "";
+      const vidUrl = cleanUrl(videoMatch?.[1]);
+      const imgUrl = cleanUrl(imageMatch?.[1]);
       return {
         title: titleMatch ? titleMatch[1] : "Instagram Post",
-        thumbnail: imageMatch ? imageMatch[1] : "",
-        url: videoMatch ? videoMatch[1] : imageMatch ? imageMatch[1] : "",
-        images: imageMatch ? [imageMatch[1]] : [],
-        audio: videoMatch ? videoMatch[1] : undefined
+        thumbnail: imgUrl,
+        url: vidUrl || imgUrl,
+        images: imgUrl ? [imgUrl] : [],
+        audio: vidUrl || undefined
       };
     }
   } catch (e) { console.error("[JekEngine] IG Scrape failed:", e.message); }
@@ -203,17 +217,31 @@ export async function POST(request) {
         }
       } catch (e) { console.warn("[Extract] TikWM fallback failed"); }
 
-      // --- FALLBACK 2: yt-dlp (Strong Fallback) ---
+      // --- FALLBACK 2: yt-dlp (Firefox Cookies or Raw Header) ---
       try {
         console.log("[Extract] Fallback: yt-dlp...");
         const binPath = getBinPath();
-        const { stdout } = await execFileAsync(binPath, [
+
+        let ytDlpArgs = [
           '--dump-json',
           '--no-check-certificates',
           '--no-warnings',
-          '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-          resolvedUrl
-        ], { timeout: 30000 });
+          '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
+        ];
+
+        const cookieStringPath = path.join(process.cwd(), 'cookie_string.txt');
+        if (fs.existsSync(cookieStringPath)) {
+          console.log("[Extract] Found cookie_string.txt! Using raw Cookie header.");
+          const rawCookie = fs.readFileSync(cookieStringPath, 'utf8').trim();
+          ytDlpArgs.push('--add-header', `Cookie: ${rawCookie}`);
+        } else {
+          console.log("[Extract] Using Firefox cookies fallback...");
+          ytDlpArgs.push('--cookies-from-browser', 'firefox');
+        }
+
+        ytDlpArgs.push(resolvedUrl);
+
+        const { stdout } = await execFileAsync(binPath, ytDlpArgs, { timeout: 30000 });
 
         const data = JSON.parse(stdout);
         const images = data.entries?.map(e => e.url) || [];
@@ -228,21 +256,70 @@ export async function POST(request) {
         };
         setCache(url, result);
         return NextResponse.json(result);
-      } catch (e) { console.warn("[Extract] yt-dlp fallback failed"); }
+      } catch (e) {
+        console.warn("[Extract] yt-dlp fallback failed:", e.message || e);
+      }
 
-      throw new Error(`Waduh, gagal narik data dari ${isTikTok ? 'TikTok' : isInstagram ? 'Instagram' : 'X/Twitter'} 😭\nCoba link lain bang.`);
+      if (isInstagram) {
+        throw new Error(`Waduh, gagal narik data dari Instagram 😭\nPastikan Firefox udah terinstall & login IG, ATAU gunakan cara manual copy cookie ya bang!`);
+      } else {
+        throw new Error(`Waduh, gagal narik data dari ${isTikTok ? 'TikTok' : 'X/Twitter'} 😭\nCoba link lain bang.`);
+      }
     }
 
     // --- OTHER PLATFORMS (YouTube, etc.) ---
     console.log("[Extract] General platform, using yt-dlp...");
     const binPath = getBinPath();
-    const { stdout } = await execFileAsync(binPath, [
+
+    // Siapkan Args dengan Cookie jika ada
+    let generalArgs = [
       '--dump-json',
       '--no-check-certificates',
       '--no-warnings',
       '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-      url
-    ], { timeout: 30000 });
+    ];
+
+    const cookieStringPath = path.join(process.cwd(), 'cookie_string.txt');
+    if (fs.existsSync(cookieStringPath)) {
+      const rawCookie = fs.readFileSync(cookieStringPath, 'utf8').trim();
+      if (rawCookie) generalArgs.push('--add-header', `Cookie: ${rawCookie}`);
+    }
+
+    let stdout;
+    try {
+      const result = await execFileAsync(binPath, [...generalArgs, url], { timeout: 30000 });
+      stdout = result.stdout;
+    } catch (e) {
+      console.warn("[Extract] yt-dlp failed on main URL, trying manual iframe scraping...");
+      // FALLBACK: Manual Iframe Scraper untuk web anime/film yang pake embed
+      try {
+        const pageRes = await fetch(url, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36' }
+        });
+        const html = await pageRes.text();
+        // Cari src dari iframe (Blogger, Streamtape, Dood, dll)
+        const iframeMatch = html.match(/<iframe[^>]*src=["']([^"']+)["']/gi);
+        if (iframeMatch) {
+          for (let ifrm of iframeMatch) {
+            const srcMatch = ifrm.match(/src=["']([^"']+)["']/i);
+            const iframeUrl = srcMatch ? srcMatch[1] : null;
+            if (iframeUrl && (iframeUrl.includes('blogger.com') || iframeUrl.includes('google') || iframeUrl.includes('stream') || iframeUrl.includes('video'))) {
+              console.log(`[Extract] Trying iframe URL: ${iframeUrl}`);
+              try {
+                const ifrmResult = await execFileAsync(binPath, [...generalArgs, iframeUrl], { timeout: 20000 });
+                if (ifrmResult.stdout) {
+                  stdout = ifrmResult.stdout;
+                  break;
+                }
+              } catch { continue; }
+            }
+          }
+        }
+      } catch (err) {
+        console.error("[Extract] Manual scraping failed:", err.message);
+      }
+      if (!stdout) throw e; // Re-throw original error if fallback also fails
+    }
 
     const data = JSON.parse(stdout);
     const result = {
@@ -258,6 +335,23 @@ export async function POST(request) {
 
   } catch (error) {
     console.error("[Extract] Final error:", error.message);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+
+    let safeMessage = error.message || "Terjadi kesalahan internal saat menarik data.";
+
+    // Cari letak teks "ERROR:" dan ambil semua kata setelahnya
+    const errorIndex = safeMessage.lastIndexOf("ERROR:");
+    if (errorIndex !== -1) {
+      safeMessage = `Sistem gagal mengekstrak video dari web ini bang 😭\nAlasan: ${safeMessage.substring(errorIndex + 6).trim()}`;
+    } else if (safeMessage.includes("Command failed:") || safeMessage.includes("yt-dlp")) {
+      // Jika tidak ada "ERROR:" spesifik tapi gagal eksekusi command, timpa dengan pesan aman
+      safeMessage = 'Gagal mengekstrak link ini bang. File diproteksi atau server menolak permintaan.';
+    }
+
+    // Pastikan benar-benar tidak ada path C:\ yang lolos
+    if (safeMessage.includes('C:\\') || safeMessage.includes('C:/')) {
+      safeMessage = 'Sistem gagal mengekstrak video dari web ini bang 😭 (Akses ditolak oleh sumber)';
+    }
+
+    return NextResponse.json({ error: safeMessage }, { status: 500 });
   }
 }

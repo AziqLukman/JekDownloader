@@ -413,3 +413,7 @@ body {
   cursor: pointer;
   font-size: 0.85rem;
 }
+
+.btn-row-hover:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}

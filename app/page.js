@@ -44,21 +44,83 @@ const SettingsIcon = ({ active }) => (
 
 const AudioIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+    <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
   </svg>
 );
 
 const ImageIcon = () => (
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><circle cx="8.5" cy="8.5" r="1.5" /><polyline points="21 15 16 10 5 21" />
+  </svg>
+);
+
+const InfoIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
+  </svg>
+);
+
+const MonitorIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" />
+  </svg>
+);
+
+const DatabaseIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" /><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+  </svg>
+);
+
+const ShieldIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  </svg>
+);
+
+const TerminalIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="4 17 10 11 4 5" /><line x1="12" y1="19" x2="20" y2="19" />
+  </svg>
+);
+
+const ChevronRightIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="9 18 15 12 9 6" />
+  </svg>
+);
+
+const ShareIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /><polyline points="16 6 12 2 8 6" /><line x1="12" y1="2" x2="12" y2="15" />
+  </svg>
+);
+
+const PlusSquareIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" /><line x1="12" y1="8" x2="12" y2="16" /><line x1="8" y1="12" x2="16" y2="12" />
   </svg>
 );
 
 const changelogData = [
   {
+    version: "1.3",
+    date: "2026-04-30",
+    isNew: true,
+    items: [
+      { title: "TikTok CDN Bypass", description: "Fix error 403 Forbidden pas download audio/video TikTok. Link CDN disikat langsung sampe dapet!" },
+      { title: "Audio History Player", description: "Player MP3 minimalis di riwayat download. Gak ada lagi layar video item yang ngga jelas." },
+      { title: "Smart Re-download", description: "Tombol download ulang sekarang pinter. Kalo lu download audio, dia narik audio lagi. Gak bakal nyasar jadi video lagi!" },
+      { title: "Iframe Scraper", description: "Mesin baru buat nembus web-web embed (kayak web anime/film). Kalau link utama gagal, sistem bakal bongkar HTML buat nyari video yang ngumpet!" },
+      { title: "Keamanan Publik", description: "Pesan error sekarang \"Sopan & Rahasia\". Alamat folder server udah disensor mutlak biar aman buat publik." },
+      { title: "Premium Settings", description: "Desain menu baru gaya SholatKu (Grouped List) biar navigasi makin berkelas." },
+      { title: "Smart PWA Popup", description: "Deteksi otomatis perangkat Apple (iOS) dengan panduan 'Add to Home Screen' yang rapi dan interaktif." }
+    ]
+  },
+  {
     version: "1.2",
     date: "2026-04-16",
-    isNew: true,
+    isNew: false,
     items: [
       { title: "Riwayat Dipisah", description: "Sekarang ada tab khusus riwayat link (Kaca Pembesar) sama riwayat file (Tombol Download). Biar gak campur aduk kyk gado-gado!" },
       { title: "Input Gak Pelit", description: "Form input download-nya sekarang standby terus di atas. Gak perlu nunggu hasil ilang buat download video lain. Sat set wat wet!" },
@@ -252,6 +314,7 @@ function DownloaderApp() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isChangelogOpen, setIsChangelogOpen] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
   // Filter states
   const [linkDateFilter, setLinkDateFilter] = useState('all');
   const [linkPlatformFilter, setLinkPlatformFilter] = useState('all');
@@ -270,6 +333,10 @@ function DownloaderApp() {
   const [sharingId, setSharingId] = useState(null);
 
   useEffect(() => {
+    // Detect iOS (iPhone/iPad/iPod)
+    const checkIOS = typeof window !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    setIsIOS(checkIOS);
+
     // Load Extraction History
     const savedExtract = localStorage.getItem("jekdownloader_extraction_history");
     if (savedExtract) {
@@ -286,9 +353,13 @@ function DownloaderApp() {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
     const dismissed = sessionStorage.getItem("jekdownloader_install_dismissed");
 
-    // Show install popup if NOT installed yet and NOT dismissed this session
+    // Smart Popup Logic
     if (!isStandalone && !dismissed) {
-      setShowInstallPrompt(true);
+      if (checkIOS) {
+        // iOS: Show guide after delay because there's no install event
+        setTimeout(() => setShowInstallPrompt(true), 6000);
+      }
+      // For Android/Desktop, the popup will be triggered by handleBeforeInstallPrompt
     }
 
     // PWA Install Prompt Logic (Chrome/Edge)
@@ -388,7 +459,7 @@ function DownloaderApp() {
     if (url) processDownload(url);
   };
 
-    const getCookie = (name) => {
+  const getCookie = (name) => {
     if (typeof document === 'undefined') return null;
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
@@ -423,7 +494,7 @@ function DownloaderApp() {
     handleDownloadClick(item, selectedRes, 'video');
   };
 
-    const triggerAudioDownload = (item) => {
+  const triggerAudioDownload = (item) => {
     const dlKey = `${item.id}_audio`;
     if (downloadingIds[dlKey]) return;
     const token = Math.random().toString(36).substring(7);
@@ -435,11 +506,11 @@ function DownloaderApp() {
     iframe.style.display = 'none';
     document.body.appendChild(iframe);
     startDownloadTracking(token, dlKey);
-    setTimeout(() => { try { document.body.removeChild(iframe); } catch {} }, 600000);
+    setTimeout(() => { try { document.body.removeChild(iframe); } catch { } }, 600000);
     handleDownloadClick(item, null, 'audio');
   };
 
-    const triggerImageDownload = (item, specificUrl = null, index = null) => {
+  const triggerImageDownload = (item, specificUrl = null, index = null) => {
     const imageUrl = specificUrl || item.thumbnail;
     if (!imageUrl) return;
     const dlKey = index !== null ? `${item.id}_img_${index}` : `${item.id}_image`;
@@ -452,7 +523,7 @@ function DownloaderApp() {
     iframe.style.display = 'none';
     document.body.appendChild(iframe);
     startDownloadTracking(token, dlKey);
-    setTimeout(() => { try { document.body.removeChild(iframe); } catch {} }, 60000);
+    setTimeout(() => { try { document.body.removeChild(iframe); } catch { } }, 60000);
     handleDownloadClick(item, null, 'image');
   };
 
@@ -695,7 +766,7 @@ function DownloaderApp() {
                   )}
                 </div>
               )}
-                        </div>
+            </div>
 
             {/* Carousel Images Section */}
             {item.images && item.images.length > 0 && (
@@ -704,8 +775,8 @@ function DownloaderApp() {
                   <ImageIcon />
                   <h4 style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.8)' }}>Carousel / Galeri Gambar ({item.images.length})</h4>
                 </div>
-                <div style={{ 
-                  display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))', 
+                <div style={{
+                  display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))',
                   gap: 12, maxHeight: 300, overflowY: 'auto', paddingRight: 4, paddingBottom: 10
                 }}>
                   {item.images.map((imgUrl, idx) => {
@@ -714,7 +785,7 @@ function DownloaderApp() {
                     return (
                       <div key={idx} style={{ position: 'relative', borderRadius: 12, overflow: 'hidden', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', height: 80 }}>
                         <img src={getProxiedThumbnail(imgUrl)} alt={`slide-${idx}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        <button 
+                        <button
                           onClick={() => triggerImageDownload(item, imgUrl, idx)}
                           style={{
                             position: 'absolute', inset: 0, width: '100%', height: '100%',
@@ -936,12 +1007,12 @@ function DownloaderApp() {
                           {item.savedResolution === 'auto' ? 'Otomatis' : `${item.savedResolution}p`}
                         </span>
                       )}
-                      <span style={{ 
-                        fontSize: '0.6rem', 
-                        color: item.downloadType === 'audio' ? '#8B5CF6' : item.downloadType === 'image' ? '#10B981' : '#3A82F6', 
-                        background: item.downloadType === 'audio' ? 'rgba(139,92,246,0.15)' : item.downloadType === 'image' ? 'rgba(16,185,129,0.15)' : 'rgba(58,130,246,0.15)', 
-                        padding: '2px 6px', borderRadius: 4, 
-                        border: `1px solid ${item.downloadType === 'audio' ? 'rgba(139,92,246,0.2)' : item.downloadType === 'image' ? 'rgba(16,185,129,0.2)' : 'rgba(58,130,246,0.2)'}`, 
+                      <span style={{
+                        fontSize: '0.6rem',
+                        color: item.downloadType === 'audio' ? '#8B5CF6' : item.downloadType === 'image' ? '#10B981' : '#3A82F6',
+                        background: item.downloadType === 'audio' ? 'rgba(139,92,246,0.15)' : item.downloadType === 'image' ? 'rgba(16,185,129,0.15)' : 'rgba(58,130,246,0.15)',
+                        padding: '2px 6px', borderRadius: 4,
+                        border: `1px solid ${item.downloadType === 'audio' ? 'rgba(139,92,246,0.2)' : item.downloadType === 'image' ? 'rgba(16,185,129,0.2)' : 'rgba(58,130,246,0.2)'}`,
                         fontWeight: 'bold',
                         textTransform: 'uppercase'
                       }}>
@@ -960,7 +1031,25 @@ function DownloaderApp() {
                     background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderTop: 'none',
                     animation: 'fadeInUp 0.2s ease'
                   }}>
-                    {item.url && (
+                    {item.downloadType === 'audio' ? (
+                      <div style={{ background: '#000', borderRadius: 12, padding: 16, marginBottom: 12, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <audio
+                          controls
+                          style={{ width: '100%' }}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <source src={`/api/proxy?url=${encodeURIComponent(item.audio || item.url)}&originalUrl=${encodeURIComponent(item.originalUrl || '')}&name=${encodeURIComponent(item.title)}&type=audio&mode=stream`} type="audio/mpeg" />
+                          Browser lu gak support audio player.
+                        </audio>
+                      </div>
+                    ) : item.downloadType === 'image' ? (
+                      <img
+                        src={`/api/proxy?url=${encodeURIComponent(item.url)}&name=${encodeURIComponent(item.title)}&type=image`}
+                        alt={item.title}
+                        style={{ width: '100%', borderRadius: 12, marginBottom: 12, background: '#000', maxHeight: 300, objectFit: 'contain' }}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    ) : item.url ? (
                       <video
                         controls
                         playsInline
@@ -975,13 +1064,18 @@ function DownloaderApp() {
                         <source src={`/api/proxy?url=${encodeURIComponent(item.url)}&originalUrl=${encodeURIComponent(item.originalUrl || '')}&name=${encodeURIComponent(item.title)}&mode=stream`} type="video/mp4" />
                         Browser lu gak support video player.
                       </video>
-                    )}
+                    ) : null}
                     <p style={{ fontSize: '0.75rem', color: '#10b981', marginBottom: 10 }}>📌 Lokasi: Memori Internal / Download</p>
                     <div style={{ display: 'flex', gap: 8 }}>
                       <button
                         className="btn-action"
                         style={{ flex: 1, padding: '10px', justifyContent: 'center' }}
-                        onClick={(e) => { e.stopPropagation(); triggerDownload(item); }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (item.downloadType === 'audio') triggerAudioDownload(item);
+                          else if (item.downloadType === 'image') triggerImageDownload(item, item.url, 0);
+                          else triggerDownload(item);
+                        }}
                       >
                         <DownloadIcon active={false} /> Download Ulang
                       </button>
@@ -1016,50 +1110,123 @@ function DownloaderApp() {
   };
 
   const renderSettings = () => (
-    <div className="fade-in-up glass-card">
-      <h2 style={{ marginBottom: 20 }}>Settings</h2>
-
-      <div style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h4 style={{ fontSize: '1rem', color: '#fff' }}>Tentang Aplikasi</h4>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem' }}>JekDownloader v{changelogData[0].version}</p>
+    <div className="fade-in-up" style={{ paddingBottom: 20 }}>
+      {/* SECTION: APPLICATION */}
+      <div style={{ marginBottom: 8, paddingLeft: 8 }}>
+        <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tentang Aplikasi</p>
+      </div>
+      <div className="glass-card" style={{ padding: 0, overflow: 'hidden', marginBottom: 24 }}>
+        <button
+          onClick={() => setIsChangelogOpen(true)}
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            padding: '16px 20px',
+            background: 'none',
+            border: 'none',
+            textAlign: 'left',
+            cursor: 'pointer',
+            transition: 'background 0.2s',
+            borderBottom: '1px solid var(--glass-border)'
+          }}
+          className="btn-row-hover"
+        >
+          <div className="list-icon" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#10b981' }}>
+            <InfoIcon />
           </div>
-          <button onClick={() => setIsChangelogOpen(true)} className="btn-action" style={{ padding: '8px 12px', fontSize: '0.8rem', background: 'rgba(58, 130, 246, 0.1)', color: '#3A82F6', border: '1px solid rgba(58, 130, 246, 0.2)' }}>
-            Lihat Pembaruan
+          <div style={{ flex: 1 }}>
+            <h4 style={{ fontSize: '0.95rem', fontWeight: 600, color: '#fff' }}>JekDownloader v{changelogData[0].version}</h4>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: 2 }}>Lihat apa yang baru di versi ini</p>
+          </div>
+          <div style={{ color: 'rgba(255,255,255,0.2)' }}>
+            <ChevronRightIcon />
+          </div>
+        </button>
+
+        <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div className="list-icon" style={{ background: 'rgba(58, 130, 246, 0.15)', color: 'var(--accent-blue)' }}>
+            <ShieldIcon />
+          </div>
+          <div style={{ flex: 1 }}>
+            <h4 style={{ fontSize: '0.95rem', fontWeight: 500 }}>Keamanan & Privasi</h4>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Server-side extraction aktif</p>
+          </div>
+          <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 8px #22c55e' }} />
+        </div>
+      </div>
+
+      {/* SECTION: DEVICE & PWA */}
+      <div style={{ marginBottom: 8, paddingLeft: 8 }}>
+        <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Akses Cepat</p>
+      </div>
+      <div className="glass-card" style={{ padding: 0, overflow: 'hidden', marginBottom: 24 }}>
+        <div style={{ padding: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
+            <div className="list-icon" style={{ background: 'rgba(255, 255, 255, 0.08)', color: '#fff' }}>
+              <MonitorIcon />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '0.95rem', fontWeight: 500 }}>Pasang Aplikasi</h4>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Simpan JekDownloader ke Layar Utama HP</p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleInstallClick}
+            className="btn-primary"
+            style={{
+              marginTop: 0,
+              padding: '14px',
+              fontSize: '0.9rem',
+              background: (deferredPrompt && !isIOS) ? 'linear-gradient(135deg, #3A82F6, #8B5CF6)' : 'rgba(255,255,255,0.05)',
+              border: (deferredPrompt && !isIOS) ? 'none' : '1px solid var(--glass-border)',
+              boxShadow: (deferredPrompt && !isIOS) ? '0 4px 15px rgba(58, 130, 246, 0.3)' : 'none'
+            }}
+          >
+            {isIOS ? "User iPhone? (Klik Share -> Add to Home Screen)" : (deferredPrompt ? "Tambahkan ke Layar Utama" : "Buka Menu Browser -> Install")}
           </button>
         </div>
-        <hr style={{ borderColor: 'var(--glass-border)', opacity: 0.5, marginTop: 15 }} />
       </div>
 
-      <h4 style={{ marginBottom: 10 }}>App Installation</h4>
-      <div className="list-card" style={{ padding: '12px 0', background: 'transparent', marginBottom: 6, flexDirection: 'column', alignItems: 'flex-start' }}>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginBottom: 12 }}>Install JekDownloader ke Home Screen supaya masuk daftar aplikasi Share HP lu.</p>
-
-        <button
-          onClick={handleInstallClick}
-          className="btn-primary"
-          style={{ marginTop: 0, padding: '12px', width: '100%' }}
-        >
-          {deferredPrompt ? "Install Aplikasi Sekarang" : "Device via iOS? (Share -> Add to Home Screen)"}
-        </button>
+      {/* SECTION: DATA MANAGEMENT */}
+      <div style={{ marginBottom: 8, paddingLeft: 8 }}>
+        <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Data Management</p>
       </div>
-
-      <h4 style={{ marginBottom: 10, marginTop: 24 }}>Storage</h4>
-      <div className="list-card" style={{ padding: '12px', background: 'rgba(255,255,255,0.05)', marginBottom: 10, justifyContent: 'space-between', alignItems: 'center' }}>
-        <div className="list-details">
-          <h4 style={{ fontSize: '1rem' }}>Riwayat Link</h4>
-          <p>{extractionHistory.length} items logged</p>
+      <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
+        <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16, borderBottom: '1px solid var(--glass-border)' }}>
+          <div className="list-icon" style={{ background: 'rgba(255, 255, 255, 0.05)', color: '#fff' }}>
+            <DatabaseIcon />
+          </div>
+          <div style={{ flex: 1 }}>
+            <h4 style={{ fontSize: '0.95rem', fontWeight: 500 }}>Riwayat Link</h4>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{extractionHistory.length} entri tersimpan</p>
+          </div>
+          <button onClick={() => clearHistory('extraction')} className="btn-install" style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '6px 14px', borderRadius: 12 }}>
+            Hapus
+          </button>
         </div>
-        <button onClick={() => clearHistory('extraction')} className="btn-install" style={{ background: '#444' }}>Clear</button>
+
+        <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div className="list-icon" style={{ background: 'rgba(255, 255, 255, 0.05)', color: '#fff' }}>
+            <TerminalIcon />
+          </div>
+          <div style={{ flex: 1 }}>
+            <h4 style={{ fontSize: '0.95rem', fontWeight: 500 }}>Riwayat File</h4>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{downloadHistory.length} file diunduh</p>
+          </div>
+          <button onClick={() => clearHistory('download')} className="btn-install" style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '6px 14px', borderRadius: 12 }}>
+            Hapus
+          </button>
+        </div>
       </div>
 
-      <div className="list-card" style={{ padding: '12px', background: 'rgba(255,255,255,0.05)', marginBottom: 10, justifyContent: 'space-between', alignItems: 'center' }}>
-        <div className="list-details">
-          <h4 style={{ fontSize: '1rem' }}>Riwayat Download</h4>
-          <p>{downloadHistory.length} items saved</p>
-        </div>
-        <button onClick={() => clearHistory('download')} className="btn-install" style={{ background: '#444' }}>Clear</button>
+      <div style={{ marginTop: 32, textAlign: 'center', padding: '0 20px' }}>
+        <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)', lineHeight: 1.5 }}>
+          Dibuat dengan ❤️ untuk kemudahan download.<br />
+          JekDownloader © 2026
+        </p>
       </div>
     </div>
   );
@@ -1086,25 +1253,71 @@ function DownloaderApp() {
         {activeTab === 'settings' && renderSettings()}
       </main>
 
-      {/* PWA Install Promotion Overlay */}
+      {/* PWA Install Promotion Overlay (JekDownloader Signature Style) */}
       {showInstallPrompt && (
-        <div className="install-popup">
-          <div className="install-info">
-            <h4>📲 Install JekDownloader</h4>
-            <p>{deferredPrompt ? "Tambahkan ke layar utama HP" : "Klik Share → Add to Home Screen"}</p>
+        <div
+          className="fade-in-up"
+          style={{
+            position: 'fixed',
+            bottom: 95, // Above bottom nav
+            left: 12,
+            right: 12,
+            zIndex: 5000,
+            background: 'rgba(15, 23, 42, 0.9)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            borderRadius: 24,
+            padding: '24px',
+            border: '1px solid rgba(58, 130, 246, 0.3)',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 20 }}>
+            <div style={{
+              width: 48, height: 48, borderRadius: 14,
+              background: 'linear-gradient(135deg, var(--accent-blue), var(--accent-purple))',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', flexShrink: 0,
+              boxShadow: '0 4px 12px rgba(58, 130, 246, 0.3)'
+            }}>
+              {isIOS ? <ShareIcon /> : <MonitorIcon />}
+            </div>
+
+            <div style={{ flex: 1 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#fff' }}>Install JekDownloader</h3>
+                <button
+                  onClick={() => { setShowInstallPrompt(false); sessionStorage.setItem("jekdownloader_install_dismissed", "1"); }}
+                  style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', fontSize: '1.2rem', cursor: 'pointer', padding: '0 4px' }}
+                >✕</button>
+              </div>
+              <p style={{ fontSize: '0.8rem', color: '#94a3b8', lineHeight: 1.4 }}>
+                Nikmati akses lebih cepat, layar penuh, dan fitur offline. 100% Aman & Ringan.
+              </p>
+            </div>
           </div>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            {deferredPrompt && (
-              <button onClick={handleInstallClick} className="btn-install">
-                Install
+
+          <div style={{ background: 'rgba(0, 0, 0, 0.2)', borderRadius: 16, padding: 16, border: '1px solid rgba(255,255,255,0.05)' }}>
+            {isIOS ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: '0.7rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>1</div>
+                  <p style={{ fontSize: '0.8rem', color: '#cbd5e1' }}>Tekan tombol <strong>Share</strong> <ShareIcon /> di bar menu</p>
+                </div>
+                <div style={{ height: 1, background: 'rgba(255,255,255,0.05)' }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'rgba(255,255,255,0.1)', color: '#fff', fontSize: '0.7rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>2</div>
+                  <p style={{ fontSize: '0.8rem', color: '#cbd5e1' }}>Pilih <strong>Add to Home Screen</strong> <PlusSquareIcon /></p>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={handleInstallClick}
+                className="btn-primary"
+                style={{ marginTop: 0, padding: '12px', width: '100%', fontSize: '0.9rem', fontWeight: 700, borderRadius: 12 }}
+              >
+                Install Sekarang
               </button>
             )}
-            <button
-              onClick={() => { setShowInstallPrompt(false); sessionStorage.setItem("jekdownloader_install_dismissed", "1"); }}
-              style={{ background: 'none', border: 'none', color: '#999', fontSize: '1.2rem', cursor: 'pointer', padding: '4px 8px' }}
-            >
-              ✕
-            </button>
           </div>
         </div>
       )}

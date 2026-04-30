@@ -2,6 +2,21 @@
 
 Semua perubahan gokil di JekDownloader bakal dicatet di sini biar gak lupa sejarah!
 
+## [1.3] - 2026-04-30
+### Added
+- **TikTok CDN Bypass**: Fix error 403 Forbidden pas download audio/video TikTok. Sekarang link CDN disikat langsung sampe dapet!
+- **Audio History Player**: Di riwayat download sekarang muncul Audio Player minimalis buat file MP3. Gak ada lagi layar video item yang ngga jelas.
+- **Smart Re-download**: Tombol "Download Ulang" sekarang pinter. Kalo lu download audio, dia narik audio lagi. Gak bakal nyasar jadi video lagi!
+- **Iframe Scraper**: Mesin baru buat nembus web-web embed (kayak web anime/film). Kalau link utama gagal, sistem bakal bongkar HTML buat nyari video yang ngumpet!
+
+### Improved
+- **Keamanan Publik**: Seluruh pesan error dari sistem disensor total (sanitasi path server) agar tidak mengungkap struktur direktori ke publik.
+- **Premium Settings**: Perombakan total tampilan menu Setelan dengan gaya *Grouped List* yang modern dan ikonik (ala SholatKu).
+- **Smart PWA Popup**: Sistem deteksi cerdas untuk perangkat iOS yang otomatis menampilkan panduan "Add to Home Screen" dengan langkah yang rapi.
+- **Pembersihan Sistem**: Menghapus seluruh artefak kode lama dan file sampah untuk menjaga performa server tetap ringan.
+
+---
+
 ## [1.2] - 2026-04-16
 ### Added
 - **Riwayat Dipisah**: Sekarang ada tab khusus riwayat link (Kaca Pembesar) sama riwayat file (Tombol Download). Biar gak campur aduk kyk gado-gado!

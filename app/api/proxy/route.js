@@ -29,6 +29,7 @@ export async function GET(request) {
   const downloadToken = searchParams.get("token"); // For tracking
   let filename = searchParams.get("name") || "video";
 
+  filename = filename.replace(/\.(mp3|mp4|webp|jpg|png|jpeg|m4a|aac)$/i, '');
   filename = filename.replace(/[^a-z0-9]/gi, '_').substring(0, 80) || "video";
 
   // === IMAGE DOWNLOAD: langsung fetch thumbnail URL ===
@@ -56,7 +57,15 @@ export async function GET(request) {
       return new Response(imgRes.body, { status: 200, headers });
     } catch (e) {
       console.error('[Proxy] Image download failed:', e.message);
-      return new Response(`Gagal download gambar: ${e.message}`, { status: 500 });
+      const headers = new Headers();
+      headers.set('Content-Type', 'text/html');
+      if (downloadToken) {
+        headers.set('Set-Cookie', `download_token=${downloadToken}; Path=/; Max-Age=60`);
+      }
+      return new Response(`<script>window.parent.alert("Waduh, gagal download gambar ini bang. Coba lagi nanti ya!");</script>`, { 
+        status: 200, 
+        headers
+      });
     }
   }
 
@@ -67,36 +76,43 @@ export async function GET(request) {
     console.log('[Proxy] Audio download for:', urlToDownload.substring(0, 80));
 
     // --- Fast Path: Jika URL sudah berupa link audio langsung (.mp3, .m4a, query audio, dll) ---
-    const isDirectAudio = urlToDownload.match(/\.(mp3|m4a|wav|aac|ogg|opus|m4b|flac)(\?|$)/i) || 
-                          urlToDownload.includes('music') || 
-                          urlToDownload.includes('tiktokcdn') ||
-                          urlToDownload.includes('.googlevideo.com/videoplayback?');
+    const fastPathUrl = directUrl || originalUrl;
+    const isDirectAudio = fastPathUrl.match(/\.(mp3|m4a|wav|aac|ogg|opus|m4b|flac)(\?|$)/i) || 
+                          fastPathUrl.includes('music') || 
+                          fastPathUrl.includes('tiktokcdn') ||
+                          fastPathUrl.includes('.googlevideo.com/videoplayback?');
 
     if (isDirectAudio) {
       console.log('[Proxy] Audio Fast Path triggered (Direct Fetch)');
       try {
-        const referer = getReferer(urlToDownload);
-        const res = await fetch(urlToDownload, {
+        const referer = getReferer(fastPathUrl);
+        const res = await fetch(fastPathUrl, {
           headers: {
-            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
             'Referer': referer
           },
           signal: AbortSignal.timeout(30000)
         });
 
         if (res.ok) {
-          const headers = new Headers();
-          headers.set('Content-Disposition', `attachment; filename="${filename}.mp3"`);
-          headers.set('Content-Type', res.headers.get('content-type') || 'audio/mpeg');
-          const cl = res.headers.get('content-length');
-          if (cl) headers.set('Content-Length', cl);
-          if (downloadToken) {
-            headers.set('Set-Cookie', `download_token=${downloadToken}; Path=/; Max-Age=60`);
+          const cl = parseInt(res.headers.get('content-length') || '0');
+          // Validasi ukuran, kalau 0 byte atau terlalu kecil (kemungkinan link expired/403 hidden), lempar ke fallback
+          if (cl > 5000) {
+            const headers = new Headers();
+            headers.set('Content-Disposition', `attachment; filename="${filename}.mp3"`);
+            headers.set('Content-Type', res.headers.get('content-type') || 'audio/mpeg');
+            headers.set('Content-Length', cl.toString());
+            if (downloadToken) {
+              headers.set('Set-Cookie', `download_token=${downloadToken}; Path=/; Max-Age=60`);
+            }
+            console.log(`[Proxy] Audio Fast Path SUCCESS: ${filename}.mp3 (Size: ${cl} bytes)`);
+            return new Response(res.body, { status: 200, headers });
+          } else {
+             console.warn(`[Proxy] Audio Fast Path returned 200 OK tapi ukuran 0b / terlalu kecil (${cl} bytes). Fallback ke yt-dlp...`);
           }
-          console.log(`[Proxy] Audio Fast Path SUCCESS: ${filename}.mp3`);
-          return new Response(res.body, { status: 200, headers });
+        } else {
+          console.warn(`[Proxy] Audio Fast Path failed (Status: ${res.status}), falling back to yt-dlp`);
         }
-        console.warn('[Proxy] Audio Fast Path failed (Status:', res.status, '), falling back to yt-dlp');
       } catch (e) {
         console.warn('[Proxy] Audio Fast Path error:', e.message, ', falling back to yt-dlp');
       }
@@ -159,8 +175,16 @@ export async function GET(request) {
       return new Response(stream, { status: 200, headers });
     } catch (e) {
       console.error('[Proxy] Audio Turbo Error:', e.message);
-      // Fallback: Jika turbo gagal, coba kirim error yang informatif
-      return new Response(`Gagal streaming audio: ${e.message}`, { status: 500 });
+      // Fallback: Return HTML script to show alert instead of downloading a corrupt file
+      const headers = new Headers();
+      headers.set('Content-Type', 'text/html');
+      if (downloadToken) {
+        headers.set('Set-Cookie', `download_token=${downloadToken}; Path=/; Max-Age=60`);
+      }
+      return new Response(`<script>window.parent.alert("Waduh, server sumber ngeblokir download audio ini bang. Coba download Videonya aja ya!");</script>`, { 
+        status: 200, 
+        headers
+      });
     }
   }
 
@@ -182,9 +206,7 @@ export async function GET(request) {
       const fetchOptions = {
         signal: controller.signal,
         headers: {
-          'User-Agent': isLikelyTikTok
-            ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1'
-            : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
           'Accept': '*/*',
           'Accept-Language': 'en-US,en;q=0.9',
           'Referer': referer,
@@ -319,7 +341,15 @@ export async function GET(request) {
 
     } catch (err) {
       console.error("[Proxy] Strategy 2 ERROR:", err.message?.substring(0, 100));
-      return new Response(`Download gagal: ${err.message}. Coba lagi nanti bang.`, { status: 500 });
+      const headers = new Headers();
+      headers.set('Content-Type', 'text/html');
+      if (downloadToken) {
+        headers.set('Set-Cookie', `download_token=${downloadToken}; Path=/; Max-Age=60`);
+      }
+      return new Response(`<script>window.parent.alert("Waduh, server sumber ngeblokir download video ini bang. Coba lagi nanti ya!");</script>`, { 
+        status: 200, 
+        headers
+      });
     }
   }
 
