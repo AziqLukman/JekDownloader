@@ -114,7 +114,9 @@ const changelogData = [
       { title: "Iframe Scraper", description: "Mesin baru buat nembus web-web embed (kayak web anime/film). Kalau link utama gagal, sistem bakal bongkar HTML buat nyari video yang ngumpet!" },
       { title: "Keamanan Publik", description: "Pesan error sekarang \"Sopan & Rahasia\". Alamat folder server udah disensor mutlak biar aman buat publik." },
       { title: "Premium Settings", description: "Desain menu baru gaya SholatKu (Grouped List) biar navigasi makin berkelas." },
-      { title: "Smart PWA Popup", description: "Deteksi otomatis perangkat Apple (iOS) dengan panduan 'Add to Home Screen' yang rapi dan interaktif." }
+      { title: "Smart PWA Popup", description: "Deteksi otomatis perangkat Apple (iOS) dengan panduan 'Add to Home Screen' yang rapi dan interaktif." },
+      { title: "Resolution Selector", description: "Fitur pilih kualitas video (HD, SD, dsb) balik lagi biar lu bisa atur kuota!" },
+      { title: "Pure Audio Engine", description: "Fix download audio YouTube yang kadang masih bawa video. Sekarang beneran MP3 doang!" }
     ]
   },
   {

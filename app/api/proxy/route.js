@@ -79,8 +79,7 @@ export async function GET(request) {
     const fastPathUrl = directUrl || originalUrl;
     const isDirectAudio = fastPathUrl.match(/\.(mp3|m4a|wav|aac|ogg|opus|m4b|flac)(\?|$)/i) || 
                           fastPathUrl.includes('music') || 
-                          fastPathUrl.includes('tiktokcdn') ||
-                          fastPathUrl.includes('.googlevideo.com/videoplayback?');
+                          fastPathUrl.includes('tiktokcdn');
 
     if (isDirectAudio) {
       console.log('[Proxy] Audio Fast Path triggered (Direct Fetch)');
@@ -128,6 +127,7 @@ export async function GET(request) {
       console.log('[Proxy] Audio Turbo: Getting direct stream URL...');
       const { stdout: streamUrlRaw } = await execFileAsync(binPath, [
         '-g', 
+        '-f', 'bestaudio',
         '--no-check-certificates',
         '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
         urlToDownload

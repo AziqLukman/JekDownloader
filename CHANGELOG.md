@@ -10,6 +10,8 @@ Semua perubahan gokil di JekDownloader bakal dicatet di sini biar gak lupa sejar
 - **Iframe Scraper**: Mesin baru buat nembus web-web embed (kayak web anime/film). Kalau link utama gagal, sistem bakal bongkar HTML buat nyari video yang ngumpet!
 
 ### Improved
+- **Resolution Selector**: Fitur pilih kualitas video (HD, SD, 1080p, dll) dikembalikan lagi agar user bisa menghemat kuota.
+- **Pure Audio Engine**: Perbaikan sistem download audio YouTube yang sebelumnya masih mengikutkan stream video. Sekarang murni MP3.
 - **Keamanan Publik**: Seluruh pesan error dari sistem disensor total (sanitasi path server) agar tidak mengungkap struktur direktori ke publik.
 - **Premium Settings**: Perombakan total tampilan menu Setelan dengan gaya *Grouped List* yang modern dan ikonik (ala SholatKu).
 - **Smart PWA Popup**: Sistem deteksi cerdas untuk perangkat iOS yang otomatis menampilkan panduan "Add to Home Screen" dengan langkah yang rapi.
