@@ -104,7 +104,8 @@ async function internalTikTokScraper(url) {
           thumbnail: videoData.video?.cover || "",
           url: videoData.video?.downloadAddr || videoData.video?.playAddr,
           audio: videoData.music?.playUrl,
-          images: videoData.imagePost?.images?.map(img => img.imageURL?.obj_node?.url_list?.[0]) || []
+          images: videoData.imagePost?.images?.map(img => img.imageURL?.obj_node?.url_list?.[0]) || [],
+          resolutions: ["Original"]
         };
       }
     }
@@ -146,7 +147,8 @@ async function internalInstagramScraper(url) {
         thumbnail: imgUrl,
         url: vidUrl || imgUrl,
         images: imgUrl ? [imgUrl] : [],
-        audio: vidUrl || undefined
+        audio: vidUrl || undefined,
+        resolutions: ["Original"]
       };
     }
   } catch (e) { console.error("[JekEngine] IG Scrape failed:", e.message); }
@@ -210,7 +212,8 @@ export async function POST(request) {
             images: d.images || [],
             originalUrl: resolvedUrl,
             sourceUrl: url,
-            audio: d.music || d.music_info?.play_url
+            audio: d.music || d.music_info?.play_url,
+            resolutions: d.hdplay ? ["HD", "SD"] : ["Normal"]
           };
           setCache(url, result);
           return NextResponse.json(result);
@@ -252,7 +255,8 @@ export async function POST(request) {
           images: images,
           originalUrl: resolvedUrl,
           sourceUrl: url,
-          audio: data.url
+          audio: data.url,
+          resolutions: [...new Set(data.formats?.filter(f => f.vcodec !== 'none' && f.height).map(f => f.height))].sort((a,b) => b-a).slice(0, 5)
         };
         setCache(url, result);
         return NextResponse.json(result);
@@ -328,7 +332,8 @@ export async function POST(request) {
       url: data.url || (data.formats && data.formats.find(f => f.vcodec !== 'none' && f.acodec !== 'none')?.url) || data.formats?.[0]?.url,
       originalUrl: url,
       sourceUrl: url,
-      audio: data.url
+      audio: data.url,
+      resolutions: [...new Set(data.formats?.filter(f => f.vcodec !== 'none' && f.height).map(f => f.height))].sort((a,b) => b-a).slice(0, 5)
     };
     setCache(url, result);
     return NextResponse.json(result);

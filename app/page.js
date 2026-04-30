@@ -735,7 +735,9 @@ function DownloaderApp() {
                 >
                   <option value="auto" style={{ color: '#000' }}>Auto (Best Quality)</option>
                   {item.resolutions.map(res => (
-                    <option key={res} value={res} style={{ color: '#000' }}>{res}p</option>
+                    <option key={res} value={res} style={{ color: '#000' }}>
+                      {isNaN(res) ? res : `${res}p`}
+                    </option>
                   ))}
                 </select>
               )}
